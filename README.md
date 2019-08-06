@@ -1,8 +1,8 @@
-# cesium-navigation-es6
+# es6-cesium-navigation
 
 Cesium 插件，它为 Cesium 地图添加了一个用户友好的指南针，导航器（放大/缩小），以及距离尺度图形用户界面。
 
-在原作者基础上进一步 ES6 化，方便 Build 后的 Cesium.js 使用。
+在原作者基础上 ES6 化更彻底，方便引用打包后的 Cesium 使用。
 
 ## Demo
 

@@ -1,14 +1,14 @@
 {
-  "name": "cesium-navigation-es6",
+  "name": "es6-cesium-navigation",
   "version": "1.0.0",
-  "description": "cesium-navigation-es6",
+  "description": "es6-cesium-navigation",
   "main": "viewerCesiumNavigationMixin.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/richard1015/cesium-navigation-es6.git"
+    "url": "git@github.com:zouyaoji/es6-cesium-navigation.git"
   },
   "dependencies": {
     "hammerjs": "^2.0.8",
@@ -23,7 +23,7 @@
   "author": "richard, zouyaoji <370681295@qq.com> (https://github.com/zouyaoji)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/richard1015/cesium-navigation-es6/issues"
+    "url": "https://github.com/zouyaoji/es6-cesium-navigation/issues"
   },
-  "homepage": "https://github.com/richard1015/cesium-navigation-es6#readme"
+  "homepage": "https://github.com/zouyaoji/es6-cesium-navigation"
 }
