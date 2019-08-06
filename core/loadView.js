@@ -1,11 +1,7 @@
-/* eslint-disable no-unused-vars */
-import Cesium from 'cesium/Cesium'
 import createFragmentFromTemplate from './createFragmentFromTemplate'
-var getElement = Cesium.getElement
-var Knockout = Cesium.knockout
 
 var loadView = function (htmlString, container, viewModel) {
-  container = getElement(container)
+  container = Cesium.getElement(container)
 
   var fragment = createFragmentFromTemplate(htmlString)
 
@@ -24,7 +20,7 @@ var loadView = function (htmlString, container, viewModel) {
   for (i = 0; i < nodes.length; ++i) {
     var node = nodes[i]
     if (node.nodeType === 1 || node.nodeType === 8) {
-      Knockout.applyBindings(viewModel, node)
+      Cesium.knockout.applyBindings(viewModel, node)
     }
   }
 

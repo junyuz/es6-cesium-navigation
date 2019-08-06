@@ -1,22 +1,17 @@
-/* eslint-disable no-unused-vars */
-import Cesium from 'cesium/Cesium'
 import KnockoutMarkdownBinding from './KnockoutMarkdownBinding'
 import KnockoutHammerBinding from './KnockoutHammerBinding'
-var Knockout = Cesium.knockout
-var SvgPathBindingHandler = Cesium.SvgPathBindingHandler
 var registerKnockoutBindings = function () {
-  SvgPathBindingHandler.register(Knockout)
-  KnockoutMarkdownBinding.register(Knockout)
-  KnockoutHammerBinding.register(Knockout)
+  Cesium.SvgPathBindingHandler.register(Cesium.knockout)
+  KnockoutMarkdownBinding.register(Cesium.knockout)
+  KnockoutHammerBinding.register(Cesium.knockout)
 
-  Knockout.bindingHandlers.embeddedComponent = {
+  Cesium.knockout.bindingHandlers.embeddedComponent = {
     init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-      var component = Knockout.unwrap(valueAccessor())
+      var component = Cesium.knockout.unwrap(valueAccessor())
       component.show(element)
       return { controlsDescendantBindings: true }
     },
-    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-    }
+    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {}
   }
 }
 

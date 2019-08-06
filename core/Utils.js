@@ -1,17 +1,4 @@
-/* eslint-disable no-unused-vars */
-import Cesium from 'cesium/Cesium'
-
-var defined = Cesium.defined
-var Ray = Cesium.Ray
-var Cartesian3 = Cesium.Cartesian3
-var Cartographic = Cesium.Cartographic
-var ReferenceFrame = Cesium.ReferenceFrame
-var SceneMode = Cesium.SceneMode
-
 var Utils = {}
-
-var unprojectedScratch = new Cartographic()
-var rayScratch = new Ray()
 
 /**
  * gets the focus point of the camera
@@ -21,21 +8,23 @@ var rayScratch = new Ray()
  * @return {Cartesian3} The modified result parameter, a new instance if none was provided or undefined if there is no focus point.
  */
 Utils.getCameraFocus = function (terria, inWorldCoordinates, result) {
+  var unprojectedScratch = new Cesium.Cartographic()
+  var rayScratch = new Cesium.Ray()
   var scene = terria.scene
   var camera = scene.camera
 
-  if (scene.mode === SceneMode.MORPHING) {
+  if (scene.mode === Cesium.SceneMode.MORPHING) {
     return undefined
   }
 
-  if (!defined(result)) {
-    result = new Cartesian3()
+  if (!Cesium.defined(result)) {
+    result = new Cesium.Cartesian3()
   }
 
   // TODO bug when tracking: if entity moves the current position should be used and not only the one when starting orbiting/rotating
   // TODO bug when tracking: reset should reset to default view of tracked entity
 
-  if (defined(terria.trackedEntity)) {
+  if (Cesium.defined(terria.trackedEntity)) {
     result = terria.trackedEntity.position.getValue(terria.clock.currentTime, result)
   } else {
     rayScratch.origin = camera.positionWC
@@ -43,15 +32,18 @@ Utils.getCameraFocus = function (terria, inWorldCoordinates, result) {
     result = scene.globe.pick(rayScratch, scene, result)
   }
 
-  if (!defined(result)) {
+  if (!Cesium.defined(result)) {
     return undefined
   }
 
-  if (scene.mode === SceneMode.SCENE2D || scene.mode === SceneMode.COLUMBUS_VIEW) {
+  if (scene.mode === Cesium.SceneMode.SCENE2D || scene.mode === Cesium.SceneMode.COLUMBUS_VIEW) {
     result = camera.worldToCameraCoordinatesPoint(result, result)
 
     if (inWorldCoordinates) {
-      result = scene.globe.ellipsoid.cartographicToCartesian(scene.mapProjection.unproject(result, unprojectedScratch), result)
+      result = scene.globe.ellipsoid.cartographicToCartesian(
+        scene.mapProjection.unproject(result, unprojectedScratch),
+        result
+      )
     }
   } else {
     if (!inWorldCoordinates) {

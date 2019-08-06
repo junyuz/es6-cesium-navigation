@@ -1,9 +1,7 @@
-/* eslint-disable no-unused-vars */
 import Hammer from 'hammerjs'
-import Cesium from 'cesium/Cesium'
-var Knockout = Cesium.knockout
-var KnockoutHammerBinding = {
-  register: function (Knockout) {
+
+class KnockoutHammerBinding {
+  static register (Knockout) {
     Knockout.bindingHandlers.swipeLeft = {
       init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
         var f = Knockout.unwrap(valueAccessor())
@@ -24,7 +22,6 @@ var KnockoutHammerBinding = {
       }
     }
   }
-
 }
 
 export default KnockoutHammerBinding

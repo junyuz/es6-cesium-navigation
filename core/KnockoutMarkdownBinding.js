@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import MarkdownItSanitizer from 'markdown-it-sanitizer'
 import MarkdownIt from 'markdown-it'
 
@@ -14,14 +13,14 @@ md.use(MarkdownItSanitizer, {
   removeUnbalanced: false,
   removeUnknown: false
 })
-var KnockoutMarkdownBinding = {
-  register: function (Knockout) {
+class KnockoutMarkdownBinding {
+  static register (Knockout) {
     Knockout.bindingHandlers.markdown = {
-      'init': function () {
+      init: function () {
         // Prevent binding on the dynamically-injected HTML (as developers are unlikely to expect that, and it has security implications)
-        return { 'controlsDescendantBindings': true }
+        return { controlsDescendantBindings: true }
       },
-      'update': function (element, valueAccessor) {
+      update: function (element, valueAccessor) {
         // Remove existing children of this element.
         while (element.firstChild) {
           Knockout.removeNode(element.firstChild)
