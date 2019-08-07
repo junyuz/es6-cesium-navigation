@@ -18,22 +18,22 @@ class CesiumNavigation {
    *
    * @param {Viewer|CesiumWidget} viewerCesiumWidget The Viewer or CesiumWidget instance
    */
-  constructor (viewerCesiumWidget) {
+  constructor(viewerCesiumWidget) {
     initialize.apply(this, arguments)
 
     this._onDestroyListeners = []
   }
 
-  setNavigationLocked (locked) {
+  setNavigationLocked(locked) {
     this._navigationLocked = locked
     this.navigationViewModel.setNavigationLocked(this._navigationLocked)
   }
 
-  getNavigationLocked () {
+  getNavigationLocked() {
     return this._navigationLocked
   }
 
-  destroy () {
+  destroy() {
     if (Cesium.defined(this.navigationViewModel)) {
       this.navigationViewModel.destroy()
     }
@@ -61,7 +61,7 @@ class CesiumNavigation {
     }
   }
 
-  addOnDestroyListener (callback) {
+  addOnDestroyListener(callback) {
     if (typeof callback === 'function') {
       this._onDestroyListeners.push(callback)
     }
@@ -72,7 +72,7 @@ class CesiumNavigation {
  * @param {Viewer|CesiumWidget} viewerCesiumWidget The Viewer or CesiumWidget instance
  * @param options
  */
-function initialize (viewerCesiumWidget, options) {
+function initialize(viewerCesiumWidget, options) {
   if (!Cesium.defined(viewerCesiumWidget)) {
     throw new Cesium.DeveloperError('CesiumWidget or Viewer is required.')
   }

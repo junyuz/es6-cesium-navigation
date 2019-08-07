@@ -1,6 +1,5 @@
 import MarkdownItSanitizer from 'markdown-it-sanitizer'
 import MarkdownIt from 'markdown-it'
-
 var htmlTagRegex = /<html(.|\s)*>(.|\s)*<\/html>/im
 
 var md = new MarkdownIt({
@@ -14,13 +13,13 @@ md.use(MarkdownItSanitizer, {
   removeUnknown: false
 })
 class KnockoutMarkdownBinding {
-  static register (Knockout) {
+  static register(Knockout) {
     Knockout.bindingHandlers.markdown = {
-      init: function () {
+      init: function() {
         // Prevent binding on the dynamically-injected HTML (as developers are unlikely to expect that, and it has security implications)
         return { controlsDescendantBindings: true }
       },
-      update: function (element, valueAccessor) {
+      update: function(element, valueAccessor) {
         // Remove existing children of this element.
         while (element.firstChild) {
           Knockout.removeNode(element.firstChild)
@@ -50,7 +49,7 @@ class KnockoutMarkdownBinding {
   }
 }
 
-function setAnchorTargets (element) {
+function setAnchorTargets(element) {
   if (element instanceof HTMLAnchorElement) {
     element.target = '_blank'
   }

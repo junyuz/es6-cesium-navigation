@@ -7,7 +7,7 @@ var Utils = {}
  * @param {Cartesian3} [result] The object in which the result will be stored.
  * @return {Cartesian3} The modified result parameter, a new instance if none was provided or undefined if there is no focus point.
  */
-Utils.getCameraFocus = function (terria, inWorldCoordinates, result) {
+Utils.getCameraFocus = function(terria, inWorldCoordinates, result) {
   var unprojectedScratch = new Cesium.Cartographic()
   var rayScratch = new Cesium.Ray()
   var scene = terria.scene

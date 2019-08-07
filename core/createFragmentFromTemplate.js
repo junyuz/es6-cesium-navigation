@@ -1,5 +1,4 @@
-
-const createFragmentFromTemplate = function (htmlString) {
+const createFragmentFromTemplate = function(htmlString) {
   var holder = document.createElement('div')
   holder.innerHTML = htmlString
   var fragment = document.createDocumentFragment()

@@ -12,7 +12,7 @@ let vectorScratch = {},
   centerScratch = {}
 
 class NavigationViewModel {
-  constructor (options) {
+  constructor(options) {
     this.terria = options.terria
     this.eventHelper = new Cesium.EventHelper()
     this.enableZoomControls = Cesium.defined(options.enableZoomControls)
@@ -67,14 +67,14 @@ class NavigationViewModel {
 
     var that = this
 
-    NavigationViewModel.prototype.setNavigationLocked = function (locked) {
+    NavigationViewModel.prototype.setNavigationLocked = function(locked) {
       this.navigationLocked = locked
       if (this.controls && this.controls.length > 1) {
         this.controls[1].setNavigationLocked(this.navigationLocked)
       }
     }
 
-    function widgetChange () {
+    function widgetChange() {
       if (Cesium.defined(that.terria)) {
         if (that._unsubcribeFromPostRender) {
           that._unsubcribeFromPostRender()
@@ -83,7 +83,7 @@ class NavigationViewModel {
 
         that.showCompass = true && that.enableCompass
 
-        that._unsubcribeFromPostRender = that.terria.scene.postRender.addEventListener(function () {
+        that._unsubcribeFromPostRender = that.terria.scene.postRender.addEventListener(function() {
           that.heading = that.terria.scene.camera.heading
         })
       } else {
@@ -100,12 +100,12 @@ class NavigationViewModel {
     widgetChange()
   }
 
-  destroy () {
+  destroy() {
     this.eventHelper.removeAll()
     // loadView(require('fs').readFileSync(baseURLEmpCesium + 'js-lib/terrajs/lib/Views/Navigation.html', 'utf8'), container, this);
   }
 
-  show (container) {
+  show(container) {
     var testing
     if (this.enableZoomControls && this.enableCompass) {
       testing =
@@ -200,25 +200,25 @@ class NavigationViewModel {
    * Adds a control to this toolbar.
    * @param {NavControl} control The control to add.
    */
-  add (control) {
+  add(control) {
     this.controls.push(control)
   }
   /**
    * Removes a control from this toolbar.
    * @param {NavControl} control The control to remove.
    */
-  remove (control) {
+  remove(control) {
     this.controls.remove(control)
   }
   /**
    * Checks if the control given is the last control in the control array.
    * @param {NavControl} control The control to remove.
    */
-  isLastControl (control) {
+  isLastControl(control) {
     return control === this.controls[this.controls.length - 1]
   }
 
-  handleMouseDown (viewModel, e) {
+  handleMouseDown(viewModel, e) {
     var scene = this.terria.scene
     if (scene.mode === Cesium.SceneMode.MORPHING) {
       return true
@@ -256,7 +256,7 @@ class NavigationViewModel {
       return true
     }
   }
-  handleDoubleClick (viewModel, e) {
+  handleDoubleClick(viewModel, e) {
     var scene = viewModel.terria.scene
     var camera = scene.camera
 
@@ -315,7 +315,7 @@ class NavigationViewModel {
     })
   }
 
-  static create (options) {
+  static create(options) {
     // options.enableZoomControls = this.enableZoomControls;
     // options.enableCompass = this.enableCompass;
     var result = new NavigationViewModel(options)
@@ -324,7 +324,7 @@ class NavigationViewModel {
   }
 }
 
-function orbit (viewModel, compassElement, cursorVector) {
+function orbit(viewModel, compassElement, cursorVector) {
   var scene = viewModel.terria.scene
 
   var sscc = scene.screenSpaceCameraController
@@ -404,7 +404,7 @@ function orbit (viewModel, compassElement, cursorVector) {
     }
   }
 
-  viewModel.orbitTickFunction = function (e) {
+  viewModel.orbitTickFunction = function(e) {
     var timestamp = Cesium.getTimestamp()
     var deltaT = timestamp - viewModel.orbitLastTimestamp
     var rate = ((viewModel.orbitCursorOpacity - 0.5) * 2.5) / 1000
@@ -453,7 +453,7 @@ function orbit (viewModel, compassElement, cursorVector) {
     viewModel.orbitLastTimestamp = timestamp
   }
 
-  function updateAngleAndOpacity (vector, compassWidth) {
+  function updateAngleAndOpacity(vector, compassWidth) {
     var angle = Math.atan2(-vector.y, vector.x)
     viewModel.orbitCursorAngle = Cesium.Math.zeroToTwoPi(angle - Cesium.Math.PI_OVER_TWO)
 
@@ -466,7 +466,7 @@ function orbit (viewModel, compassElement, cursorVector) {
     // viewModel.terria.cesium.notifyRepaintRequired();
   }
 
-  viewModel.orbitMouseMoveFunction = function (e) {
+  viewModel.orbitMouseMoveFunction = function(e) {
     var compassRectangle = compassElement.getBoundingClientRect()
     var center = new Cesium.Cartesian2(
       (compassRectangle.right - compassRectangle.left) / 2.0,
@@ -480,7 +480,7 @@ function orbit (viewModel, compassElement, cursorVector) {
     updateAngleAndOpacity(vector, compassRectangle.width)
   }
 
-  viewModel.orbitMouseUpFunction = function (e) {
+  viewModel.orbitMouseUpFunction = function(e) {
     // TODO: if mouse didn't move, reset view to looking down, north is up?
 
     viewModel.isOrbiting = false
@@ -503,7 +503,7 @@ function orbit (viewModel, compassElement, cursorVector) {
   updateAngleAndOpacity(cursorVector, compassElement.getBoundingClientRect().width)
 }
 
-function rotate (viewModel, compassElement, cursorVector) {
+function rotate(viewModel, compassElement, cursorVector) {
   var scene = viewModel.terria.scene
   var camera = scene.camera
 
@@ -577,7 +577,7 @@ function rotate (viewModel, compassElement, cursorVector) {
     camera.lookAtTransform(oldTransform)
   }
 
-  viewModel.rotateMouseMoveFunction = function (e) {
+  viewModel.rotateMouseMoveFunction = function(e) {
     var compassRectangle = compassElement.getBoundingClientRect()
     var center = new Cesium.Cartesian2(
       (compassRectangle.right - compassRectangle.left) / 2.0,
@@ -613,7 +613,7 @@ function rotate (viewModel, compassElement, cursorVector) {
     // viewModel.terria.cesium.notifyRepaintRequired();
   }
 
-  viewModel.rotateMouseUpFunction = function (e) {
+  viewModel.rotateMouseUpFunction = function(e) {
     viewModel.isRotating = false
     document.removeEventListener('mousemove', viewModel.rotateMouseMoveFunction, false)
     document.removeEventListener('mouseup', viewModel.rotateMouseUpFunction, false)

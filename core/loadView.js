@@ -1,6 +1,6 @@
 import createFragmentFromTemplate from './createFragmentFromTemplate'
 
-var loadView = function (htmlString, container, viewModel) {
+var loadView = function(htmlString, container, viewModel) {
   container = Cesium.getElement(container)
 
   var fragment = createFragmentFromTemplate(htmlString)

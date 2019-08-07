@@ -14,7 +14,7 @@ class ZoomNavigationControl extends NavigationControl {
    * @param {Terria} terria The Terria instance.
    * @param {boolean} zoomIn is used for zooming in (true) or out (false)
    */
-  constructor (terria, zoomIn) {
+  constructor(terria, zoomIn) {
     super(terria, zoomIn)
 
     /**
@@ -53,11 +53,11 @@ class ZoomNavigationControl extends NavigationControl {
    * @abstract
    * @protected
    */
-  activate () {
+  activate() {
     this.zoom(this.relativeAmount)
   }
 
-  zoom (relativeAmount) {
+  zoom(relativeAmount) {
     // this.terria.analytics.logEvent('navigation', 'click', 'zoomIn');
     this.isActive = true
 

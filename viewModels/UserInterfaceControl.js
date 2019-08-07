@@ -8,7 +8,7 @@ class UserInterfaceControl {
    *
    * @param {Terria} terria The Terria instance.
    */
-  constructor (terria) {
+  constructor(terria) {
     if (!Cesium.defined(terria)) {
       throw new Cesium.DeveloperError('terria is required')
     }
@@ -76,7 +76,7 @@ class UserInterfaceControl {
    * @abstract
    * @protected
    */
-  activate () {
+  activate() {
     throw new Cesium.DeveloperError('activate must be implemented in the derived class.')
   }
 
@@ -85,14 +85,14 @@ class UserInterfaceControl {
    * @memberOf UserInterfaceControl.prototype
    * @type {Terria}
    */
-  get terria () {
+  get terria() {
     return this._terria
   }
   /**
    * Gets a value indicating whether this button has text associated with it.
    * @type {Object}
    */
-  get hasText () {
+  get hasText() {
     return Cesium.defined(this.text) && typeof this.text === 'string'
   }
 }

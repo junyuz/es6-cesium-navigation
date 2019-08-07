@@ -11,7 +11,7 @@ class ResetViewNavigationControl extends NavigationControl {
    *
    * @param {Terria} terria The Terria instance.
    */
-  constructor (terria) {
+  constructor(terria) {
     super(terria)
 
     /**
@@ -47,11 +47,11 @@ class ResetViewNavigationControl extends NavigationControl {
     this.cssClass = 'navigation-control-icon-reset'
   }
 
-  setNavigationLocked (locked) {
+  setNavigationLocked(locked) {
     this.navigationLocked = locked
   }
 
-  resetView () {
+  resetView() {
     // this.terria.analytics.logEvent('navigation', 'click', 'reset');
     if (this.navigationLocked) {
       return
@@ -117,7 +117,7 @@ class ResetViewNavigationControl extends NavigationControl {
    * @abstract
    * @protected
    */
-  activate () {
+  activate() {
     this.resetView()
   }
 }

@@ -24,31 +24,13 @@ class viewerCesiumNavigationMixin {
    * var viewer = new Cesium.Viewer('cesiumContainer');
    * viewer.extend(viewerCesiumNavigationMixin);
    */
-  constructor (viewer, options) {
+  constructor(viewer, options) {
     if (!Cesium.defined(viewer)) {
       throw new Cesium.DeveloperError('viewer is required.')
     }
-
-    var cesiumNavigation = this.init(viewer, options)
-
-    cesiumNavigation.addOnDestroyListener(
-      (function (viewer) {
-        return function () {
-          delete viewer.cesiumNavigation
-        }
-      })(viewer)
-    )
-
-    Cesium.defineProperties(viewer, {
-      cesiumNavigation: {
-        configurable: true,
-        get: function () {
-          return viewer.cesiumWidget.cesiumNavigation
-        }
-      }
-    })
-
-    window.cesiumNavigation = cesiumNavigation
+    this.viewer = viewer
+    this.options = options
+    this.init()
   }
 
   /**
@@ -56,34 +38,40 @@ class viewerCesiumNavigationMixin {
    * @param {CesiumWidget} cesiumWidget The cesium widget instance.
    * @param {{}} options The options.
    */
-  mixinWidget (cesiumWidget, options) {
+  mixinWidget(cesiumWidget, options) {
     return this.init.apply(undefined, arguments)
   }
 
-  init (viewerCesiumWidget, options) {
-    var cesiumNavigation = new CesiumNavigation(viewerCesiumWidget, options)
+  init() {
+    const { viewer, options } = this
+    var cesiumNavigation = new CesiumNavigation(viewer, options)
 
-    var cesiumWidget = Cesium.defined(viewerCesiumWidget.cesiumWidget)
-      ? viewerCesiumWidget.cesiumWidget
-      : viewerCesiumWidget
+    var cesiumWidget = Cesium.defined(viewer.cesiumWidget) ? viewer.cesiumWidget : viewer
 
     Cesium.defineProperties(cesiumWidget, {
       cesiumNavigation: {
         configurable: true,
-        get: function () {
+        get: function() {
           return cesiumNavigation
         }
       }
     })
 
     cesiumNavigation.addOnDestroyListener(
-      (function (cesiumWidget) {
-        return function () {
+      (function(cesiumWidget) {
+        return function() {
           delete cesiumWidget.cesiumNavigation
         }
       })(cesiumWidget)
     )
 
+    cesiumNavigation.addOnDestroyListener(
+      (function(viewer) {
+        return function() {
+          delete viewer.cesiumNavigation
+        }
+      })(viewer)
+    )
     return cesiumNavigation
   }
 }
