@@ -504,98 +504,72 @@ function orbit(viewModel, compassElement, cursorVector) {
 }
 
 function rotate(viewModel, compassElement, cursorVector) {
-  var scene = viewModel.terria.scene
-  var camera = scene.camera
+  viewModel.terria.options.enableCompassOuterRing = Cesium.defined(
+    viewModel.terria.options.enableCompassOuterRing
+  )
+    ? viewModel.terria.options.enableCompassOuterRing
+    : true
+  if (viewModel.terria.options.enableCompassOuterRing) {
+    var scene = viewModel.terria.scene
+    var camera = scene.camera
 
-  var sscc = scene.screenSpaceCameraController
-  // do not rotate in 2D mode or if rotating is disabled
-  if (
-    scene.mode === Cesium.SceneMode.MORPHING ||
-    scene.mode === Cesium.SceneMode.SCENE2D ||
-    !sscc.enableInputs
-  ) {
-    return
-  }
-  if (viewModel.navigationLocked) {
-    return true
-  }
-
-  if (
-    !sscc.enableLook &&
-    (scene.mode === Cesium.SceneMode.COLUMBUS_VIEW ||
-      (scene.mode === Cesium.SceneMode.SCENE3D && !sscc.enableRotate))
-  ) {
-    return
-  }
-
-  // Remove existing event handlers, if any.
-  document.removeEventListener('mousemove', viewModel.rotateMouseMoveFunction, false)
-  document.removeEventListener('mouseup', viewModel.rotateMouseUpFunction, false)
-
-  viewModel.rotateMouseMoveFunction = undefined
-  viewModel.rotateMouseUpFunction = undefined
-
-  viewModel.isRotating = true
-  viewModel.rotateInitialCursorAngle = Math.atan2(-cursorVector.y, cursorVector.x)
-
-  if (Cesium.defined(viewModel.terria.trackedEntity)) {
-    // when tracking an entity simply use that reference frame
-    viewModel.rotateFrame = undefined
-    viewModel.rotateIsLook = false
-  } else {
-    var viewCenter = Utils.getCameraFocus(viewModel.terria, true, centerScratch)
+    var sscc = scene.screenSpaceCameraController
+    // do not rotate in 2D mode or if rotating is disabled
+    if (
+      scene.mode === Cesium.SceneMode.MORPHING ||
+      scene.mode === Cesium.SceneMode.SCENE2D ||
+      !sscc.enableInputs
+    ) {
+      return
+    }
+    if (viewModel.navigationLocked) {
+      return true
+    }
 
     if (
-      !Cesium.defined(viewCenter) ||
-      (scene.mode === Cesium.SceneMode.COLUMBUS_VIEW && !sscc.enableLook && !sscc.enableTranslate)
+      !sscc.enableLook &&
+      (scene.mode === Cesium.SceneMode.COLUMBUS_VIEW ||
+        (scene.mode === Cesium.SceneMode.SCENE3D && !sscc.enableRotate))
     ) {
-      viewModel.rotateFrame = Cesium.Transforms.eastNorthUpToFixedFrame(
-        camera.positionWC,
-        scene.globe.ellipsoid,
-        newTransformScratch
-      )
-      viewModel.rotateIsLook = true
-    } else {
-      viewModel.rotateFrame = Cesium.Transforms.eastNorthUpToFixedFrame(
-        viewCenter,
-        scene.globe.ellipsoid,
-        newTransformScratch
-      )
-      viewModel.rotateIsLook = false
+      return
     }
-  }
 
-  var oldTransform
-  if (Cesium.defined(viewModel.rotateFrame)) {
-    oldTransform = Cesium.Matrix4.clone(camera.transform, oldTransformScratch)
-    camera.lookAtTransform(viewModel.rotateFrame)
-  }
+    // Remove existing event handlers, if any.
+    document.removeEventListener('mousemove', viewModel.rotateMouseMoveFunction, false)
+    document.removeEventListener('mouseup', viewModel.rotateMouseUpFunction, false)
 
-  viewModel.rotateInitialCameraAngle = -camera.heading
+    viewModel.rotateMouseMoveFunction = undefined
+    viewModel.rotateMouseUpFunction = undefined
 
-  if (Cesium.defined(viewModel.rotateFrame)) {
-    camera.lookAtTransform(oldTransform)
-  }
+    viewModel.isRotating = true
+    viewModel.rotateInitialCursorAngle = Math.atan2(-cursorVector.y, cursorVector.x)
 
-  viewModel.rotateMouseMoveFunction = function(e) {
-    var compassRectangle = compassElement.getBoundingClientRect()
-    var center = new Cesium.Cartesian2(
-      (compassRectangle.right - compassRectangle.left) / 2.0,
-      (compassRectangle.bottom - compassRectangle.top) / 2.0
-    )
-    var clickLocation = new Cesium.Cartesian2(
-      e.clientX - compassRectangle.left,
-      e.clientY - compassRectangle.top
-    )
-    var vector = Cesium.Cartesian2.subtract(clickLocation, center, vectorScratch)
-    var angle = Math.atan2(-vector.y, vector.x)
+    if (Cesium.defined(viewModel.terria.trackedEntity)) {
+      // when tracking an entity simply use that reference frame
+      viewModel.rotateFrame = undefined
+      viewModel.rotateIsLook = false
+    } else {
+      var viewCenter = Utils.getCameraFocus(viewModel.terria, true, centerScratch)
 
-    var angleDifference = angle - viewModel.rotateInitialCursorAngle
-    var newCameraAngle = Cesium.Math.zeroToTwoPi(
-      viewModel.rotateInitialCameraAngle - angleDifference
-    )
-
-    var camera = viewModel.terria.scene.camera
+      if (
+        !Cesium.defined(viewCenter) ||
+        (scene.mode === Cesium.SceneMode.COLUMBUS_VIEW && !sscc.enableLook && !sscc.enableTranslate)
+      ) {
+        viewModel.rotateFrame = Cesium.Transforms.eastNorthUpToFixedFrame(
+          camera.positionWC,
+          scene.globe.ellipsoid,
+          newTransformScratch
+        )
+        viewModel.rotateIsLook = true
+      } else {
+        viewModel.rotateFrame = Cesium.Transforms.eastNorthUpToFixedFrame(
+          viewCenter,
+          scene.globe.ellipsoid,
+          newTransformScratch
+        )
+        viewModel.rotateIsLook = false
+      }
+    }
 
     var oldTransform
     if (Cesium.defined(viewModel.rotateFrame)) {
@@ -603,27 +577,60 @@ function rotate(viewModel, compassElement, cursorVector) {
       camera.lookAtTransform(viewModel.rotateFrame)
     }
 
-    var currentCameraAngle = -camera.heading
-    camera.rotateRight(newCameraAngle - currentCameraAngle)
+    viewModel.rotateInitialCameraAngle = -camera.heading
 
     if (Cesium.defined(viewModel.rotateFrame)) {
       camera.lookAtTransform(oldTransform)
     }
 
-    // viewModel.terria.cesium.notifyRepaintRequired();
+    viewModel.rotateMouseMoveFunction = function(e) {
+      var compassRectangle = compassElement.getBoundingClientRect()
+      var center = new Cesium.Cartesian2(
+        (compassRectangle.right - compassRectangle.left) / 2.0,
+        (compassRectangle.bottom - compassRectangle.top) / 2.0
+      )
+      var clickLocation = new Cesium.Cartesian2(
+        e.clientX - compassRectangle.left,
+        e.clientY - compassRectangle.top
+      )
+      var vector = Cesium.Cartesian2.subtract(clickLocation, center, vectorScratch)
+      var angle = Math.atan2(-vector.y, vector.x)
+
+      var angleDifference = angle - viewModel.rotateInitialCursorAngle
+      var newCameraAngle = Cesium.Math.zeroToTwoPi(
+        viewModel.rotateInitialCameraAngle - angleDifference
+      )
+
+      var camera = viewModel.terria.scene.camera
+
+      var oldTransform
+      if (Cesium.defined(viewModel.rotateFrame)) {
+        oldTransform = Cesium.Matrix4.clone(camera.transform, oldTransformScratch)
+        camera.lookAtTransform(viewModel.rotateFrame)
+      }
+
+      var currentCameraAngle = -camera.heading
+      camera.rotateRight(newCameraAngle - currentCameraAngle)
+
+      if (Cesium.defined(viewModel.rotateFrame)) {
+        camera.lookAtTransform(oldTransform)
+      }
+
+      // viewModel.terria.cesium.notifyRepaintRequired();
+    }
+
+    viewModel.rotateMouseUpFunction = function(e) {
+      viewModel.isRotating = false
+      document.removeEventListener('mousemove', viewModel.rotateMouseMoveFunction, false)
+      document.removeEventListener('mouseup', viewModel.rotateMouseUpFunction, false)
+
+      viewModel.rotateMouseMoveFunction = undefined
+      viewModel.rotateMouseUpFunction = undefined
+    }
+
+    document.addEventListener('mousemove', viewModel.rotateMouseMoveFunction, false)
+    document.addEventListener('mouseup', viewModel.rotateMouseUpFunction, false)
   }
-
-  viewModel.rotateMouseUpFunction = function(e) {
-    viewModel.isRotating = false
-    document.removeEventListener('mousemove', viewModel.rotateMouseMoveFunction, false)
-    document.removeEventListener('mouseup', viewModel.rotateMouseUpFunction, false)
-
-    viewModel.rotateMouseMoveFunction = undefined
-    viewModel.rotateMouseUpFunction = undefined
-  }
-
-  document.addEventListener('mousemove', viewModel.rotateMouseMoveFunction, false)
-  document.addEventListener('mouseup', viewModel.rotateMouseUpFunction, false)
 }
 
 export default NavigationViewModel
