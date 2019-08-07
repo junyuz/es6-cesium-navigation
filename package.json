@@ -1,6 +1,6 @@
 {
   "name": "es6-cesium-navigation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "es6-cesium-navigation",
   "main": "viewerCesiumNavigationMixin.js",
   "scripts": {
