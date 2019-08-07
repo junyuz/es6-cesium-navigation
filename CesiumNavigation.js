@@ -3,15 +3,6 @@ import DistanceLegendViewModel from './viewModels/DistanceLegendViewModel'
 import NavigationViewModel from './viewModels/NavigationViewModel'
 
 class CesiumNavigation {
-  distanceLegendViewModel = undefined
-  navigationViewModel = undefined
-  navigationDiv = undefined
-  distanceLegendDiv = undefined
-  terria = undefined
-  container = undefined
-  _onDestroyListeners = undefined
-  _navigationLocked = false
-
   /**
    * @alias CesiumNavigation
    * @constructor
@@ -19,8 +10,15 @@ class CesiumNavigation {
    * @param {Viewer|CesiumWidget} viewerCesiumWidget The Viewer or CesiumWidget instance
    */
   constructor(viewerCesiumWidget) {
+    this.distanceLegendViewModel = undefined
+    this.navigationViewModel = undefined
+    this.navigationDiv = undefined
+    this.distanceLegendDiv = undefined
+    this.terria = undefined
+    this.container = undefined
+    this._onDestroyListeners = undefined
+    this._navigationLocked = false
     initialize.apply(this, arguments)
-
     this._onDestroyListeners = []
   }
 

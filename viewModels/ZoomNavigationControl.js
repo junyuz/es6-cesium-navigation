@@ -2,8 +2,6 @@ import NavigationControl from './NavigationControl'
 import Utils from '../core/Utils'
 
 class ZoomNavigationControl extends NavigationControl {
-  relativeAmount = 1
-
   /**
    * The model for a zoom in control in the navigation control tool bar
    *
