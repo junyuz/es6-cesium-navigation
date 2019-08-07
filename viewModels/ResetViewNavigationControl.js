@@ -74,33 +74,30 @@ class ResetViewNavigationControl extends NavigationControl {
       this.terria.trackedEntity = trackedEntity
     } else {
       // reset to a default position or view defined in the options
-      if (this.terria.options.defaultResetView) {
-        if (
-          this.terria.options.defaultResetView &&
-          this.terria.options.defaultResetView instanceof Cesium.Cartographic
-        ) {
+      const resetView = this.terria.options.defaultResetView
+      if (resetView && resetView.length === 3) {
+        camera.flyTo({
+          destination: Cesium.Cartesian3.fromDegrees(resetView[0], resetView[1], resetView[2])
+        })
+      } else if (resetView && resetView.length === 4) {
+        try {
+          let rectangle = Cesium.Rectangle.fromDegrees(
+            resetView[0],
+            resetView[1],
+            resetView[2],
+            resetView[3]
+          )
+          Cesium.Rectangle.validate(rectangle)
           camera.flyTo({
-            destination: scene.globe.ellipsoid.cartographicToCartesian(
-              this.terria.options.defaultResetView
-            )
+            destination: rectangle,
+            orientation: {
+              heading: Cesium.Math.toRadians(5.729578)
+            }
           })
-        } else if (
-          this.terria.options.defaultResetView &&
-          this.terria.options.defaultResetView instanceof Cesium.Rectangle
-        ) {
-          try {
-            Cesium.Rectangle.validate(this.terria.options.defaultResetView)
-            camera.flyTo({
-              destination: this.terria.options.defaultResetView,
-              orientation: {
-                heading: Cesium.Math.toRadians(5.729578)
-              }
-            })
-          } catch (e) {
-            console.log(
-              'Cesium-navigation/ResetViewNavigationControl:   options.defaultResetView Cesium rectangle is  invalid!'
-            )
-          }
+        } catch (e) {
+          console.log(
+            'Cesium-navigation/ResetViewNavigationControl:   options.defaultResetView Cesium rectangle is  invalid!'
+          )
         }
       } else if (typeof camera.flyHome === 'function') {
         camera.flyHome(1)
