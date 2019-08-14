@@ -77,16 +77,11 @@ class ResetViewNavigationControl extends NavigationControl {
       const resetView = this.terria.options.defaultResetView
       if (resetView && resetView.length === 3) {
         camera.flyTo({
-          destination: Cesium.Cartesian3.fromDegrees(resetView[0], resetView[1], resetView[2])
+          destination: Cesium.Cartesian3.fromDegrees(resetView.lng, resetView.lat, resetView.height)
         })
       } else if (resetView && resetView.length === 4) {
         try {
-          let rectangle = Cesium.Rectangle.fromDegrees(
-            resetView[0],
-            resetView[1],
-            resetView[2],
-            resetView[3]
-          )
+          let rectangle = Cesium.Rectangle.fromDegrees(resetView.west, resetView.south, resetView.east, resetView.north)
           Cesium.Rectangle.validate(rectangle)
           camera.flyTo({
             destination: rectangle,
@@ -99,10 +94,10 @@ class ResetViewNavigationControl extends NavigationControl {
             'Cesium-navigation/ResetViewNavigationControl:   options.defaultResetView Cesium rectangle is  invalid!'
           )
         }
-      } else if (typeof camera.flyHome === 'function') {
-        camera.flyHome(1)
       } else {
-        camera.flyTo({ destination: Cesium.Camera.DEFAULT_VIEW_RECTANGLE, duration: 1 })
+        camera.flyTo({
+          destination: Cesium.Cartesian3.fromDegrees(105, 29.999999999999993, 19059568.497290563)
+        })
       }
     }
     this.isActive = false
